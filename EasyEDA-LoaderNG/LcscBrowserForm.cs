@@ -178,8 +178,10 @@ namespace EasyEDA_LoaderNG
         private async Task EnsureBrowserReady()
         {
             if (_browserReady) return;
-            await _browser.EnsureCoreWebView2Async();
-            await _hiddenBrowser.EnsureCoreWebView2Async();
+            var userDataFolder = Path.Combine(Path.GetTempPath(), "EasyEDA-LoaderNG-WebView2");
+            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder);
+            await _browser.EnsureCoreWebView2Async(env);
+            await _hiddenBrowser.EnsureCoreWebView2Async(env);
             _browserReady = true;
 
             // --- LE NETTOYEUR ULTIME (Popup + Avatar) ---
